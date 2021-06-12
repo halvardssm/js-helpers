@@ -5,7 +5,7 @@ lint:
 	deno lint src/mod.ts
 
 fmt:
-	deno fmt --check src/mod.ts
+	deno fmt --check
 
 bundle:
 	mkdir -p dist

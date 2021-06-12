@@ -1,12 +1,12 @@
 {
-	"name": "@halvardssm/js-helpers",
-	"version": "0.1.1",
-	"repository": "https://github.com/halvardssm/js-helpers.git",
-	"author": "Halvard Mørstad <halvard@simplyundoable.com>",
-	"license": "MIT",
-	"main": "dist/bundle.js",
-	"files": [
-		"dist/*",
-        "src/*"
-	]
+  "name": "@halvardssm/js-helpers",
+  "version": "0.1.1",
+  "repository": "https://github.com/halvardssm/js-helpers.git",
+  "author": "Halvard Mørstad <halvard@simplyundoable.com>",
+  "license": "MIT",
+  "main": "dist/bundle.js",
+  "files": [
+    "dist/*",
+    "src/*"
+  ]
 }
