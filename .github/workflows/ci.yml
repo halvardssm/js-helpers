@@ -73,4 +73,4 @@ jobs:
 
   #     - name: Publish package to NPM
   #       if: steps.create_release.outcome == 'Success'
-  #       run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn pack && yarn publish $PACKAGE_NAME-v${{steps.check.outputs.version}}.tgz --non-interactive
+  #       run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --new-version ${{steps.check.outputs.version}} --non-interactive
