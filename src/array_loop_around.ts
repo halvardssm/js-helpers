@@ -4,9 +4,9 @@
  * When index is larger than the array length,
  * it will loop around and start from the beginning.
  *
- *    arrayLoopAround([1,2,3], 3) // 1
- *    arrayLoopAround([1,2,3], 4) // 2
- *    arrayLoopAround([1,2,3], 7) // 2
+ *      arrayLoopAround([1,2,3], 3) // 1
+ *      arrayLoopAround([1,2,3], 4) // 2
+ *      arrayLoopAround([1,2,3], 7) // 2
  */
 export function arrayLoopAround<T>(
   array: T[],
@@ -26,10 +26,10 @@ export function arrayLoopAround<T>(
 
 /** Creates a generator which loops around the array.
  *
- *    const gen = arrayLoopAroundGenerator([1,2], true)
- *    console.log(gen.next().value) // 1
- *    console.log(gen.next().value) // 2
- *    console.log(gen.next().value) // 1
+ *      const gen = arrayLoopAroundGenerator([1,2], true)
+ *      console.log(gen.next().value) // 1
+ *      console.log(gen.next().value) // 2
+ *      console.log(gen.next().value) // 1
  */
 export function* arrayLoopAroundGenerator<T>(
   array: T[],
