@@ -58,8 +58,8 @@ Deno.test({
 Deno.test({
   name: "Test arrayLoopAroundGenerator - descending",
   fn(): void {
-    const rangeArray = range(0,9);
-    const expected = [3,2,1,3,2,1,3,2,1,3];
+    const rangeArray = range(0, 9);
+    const expected = [3, 2, 1, 3, 2, 1, 3, 2, 1, 3];
     const array = [1, 2, 3];
     const actual = [];
 
