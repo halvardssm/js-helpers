@@ -27,6 +27,7 @@ jobs:
         run: make fmt
 
       - name: Run lint
+        run: make lint
 
       - name: Run test
         run: make test
