@@ -1,0 +1,75 @@
+name: ci
+
+env:
+  DENO_VERSION: 1.10.3
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install deno
+        uses: denoland/setup-deno@main
+        with: 
+          deno-version: ${{env.DENO_VERSION}}
+
+      - name: Run fmt
+        run: make fmt
+
+      - name: Run lint
+
+      - name: Run test
+        run: make test
+
+  # publish_npm:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   if: contains(github.ref, 'main')
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+
+  #     - name: Install deno
+  #       uses: denoland/setup-deno@main
+  #       with: 
+  #         deno-version: ${{env.DENO_VERSION}}
+
+  #     - name: Check version changes
+  #       id: check
+  #       uses: EndBug/version-check@v2.0.1
+  #       with:
+  #         diff-search: true
+  #         file-name: ./package.json
+
+  #     - name: Version update detected
+  #       if: steps.check.outputs.changed == 'true'
+  #       run: 'echo "Version change found! Will run Release CI. New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
+
+  #     - name: Create Release
+  #       if: steps.check.outputs.changed == 'true'
+  #       id: create_release
+  #       uses: actions/create-release@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         tag_name: ${{steps.check.outputs.version}}
+  #         release_name: Release ${{steps.check.outputs.version}}
+  #         draft: false
+  #         prerelease: false
+
+  #     - name: Get package name
+  #       run: PACKAGE_NAME=$(cat package.json | jq .name)
+
+  #     - name: Publish package to NPM
+  #       if: steps.create_release.outcome == 'Success'
+  #       run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn pack && yarn publish $PACKAGE_NAME-v${{steps.check.outputs.version}}.tgz --non-interactive
