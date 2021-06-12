@@ -6,7 +6,8 @@ This is a repo containing helper methods for js written in ts. Testing is done
 via deno. All modules should be compatible with web standards so that they can
 be used both for Deno and Node (eventually).
 
-Node support will come eventually if I need it, or someone else starts using the repo and requests it.
+Node support will come eventually if I need it, or someone else starts using the
+repo and requests it.
 
 > 🚨 This is a repo intended for personal use. If you stumbled across it and want
 > to use it, please submit an issue, and I will take care to version it
