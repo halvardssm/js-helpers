@@ -1,4 +1,5 @@
-import { deepClone } from "./deep_clone.ts";
+// deno-lint-ignore-file no-explicit-any
+import { deepClone,cloneDate } from "./deep_clone.ts";
 import {
   assertEquals,
   assertNotEquals,
@@ -86,5 +87,18 @@ Deno.test({
     assertEquals(initial, expected);
     assertEquals(cloned, { a: 1, b: 4, c: 3 });
     assertNotEquals(initial, cloned);
+  },
+});
+
+Deno.test({
+  name: "Test deepClone - add predicate",
+  fn(): void {
+    const expected = new Date();
+
+    const initial = new Date();
+    const cloned: any = deepClone(initial,{predicates:[cloneDate]});
+
+    assertEquals(cloned, expected);
+    assertNotStrictEquals(cloned, initial);
   },
 });

@@ -13,7 +13,9 @@ export type PredicateOptions<T = any> = {
  *
  * Returns [wasCloned, clonedElement]
  */
-export type Predicate<T = any> = (options: PredicateOptions<T>) => [boolean, T];
+export type Predicate<T = any> = (
+  options: PredicateOptions<T>,
+) => [true, T] | [false, undefined];
 export type Cloner<T = any> = (options: PredicateOptions<T>) => T;
 export type DeepCloneOptions = {
   predicates?: Predicate[];
@@ -25,7 +27,7 @@ export const cloneArray: Predicate<any[]> = ({
   predicates,
   cloner,
 }) => {
-  if (type(object) !== "array") return [false, []];
+  if (type(object) !== "array") return [false, undefined];
 
   const newObject: any[] = [];
 
@@ -41,7 +43,7 @@ export const cloneObject: Predicate = ({
   predicates,
   cloner,
 }) => {
-  if (type(object) !== "object") return [false];
+  if (type(object) !== "object") return [false, undefined];
 
   const newObject: any = {};
 
@@ -49,26 +51,15 @@ export const cloneObject: Predicate = ({
     newObject[key] = cloner({ object: value, predicates, cloner });
   }
 
-  return newObject;
+  return [true, newObject];
 };
 
 export const cloneDate: Predicate<Date> = ({ object }) => {
-  if (type(object) !== "date") return [false];
+  if (type(object) !== "date") return [false, undefined];
 
   const newObject: any = new Date();
   newObject.setTime(object.getTime());
-  return newObject;
-};
-
-const cloner: Cloner = (options) => {
-  for (const fn of options.predicates) {
-    console.log(fn)
-    const [wasCloned, clonedElement] = fn(options);
-
-    if (wasCloned) return clonedElement;
-  }
-
-  return options.object;
+  return [true, newObject];
 };
 
 /** Will deep clone any element using provided predicates.
@@ -83,6 +74,16 @@ const cloner: Cloner = (options) => {
  *        console.log(clone) // {a:2}
  */
 export function deepClone<T>(object: T, options: DeepCloneOptions = {}): T {
+  const cloner: Cloner = (options) => {
+    for (const fn of options.predicates) {
+      const [wasCloned, clonedElement] = fn(options);
+
+      if (wasCloned) return clonedElement;
+    }
+
+    return options.object;
+  };
+
   const predicates: Predicate[] = [...(options.predicates ?? [])];
 
   if (!options.override) {
@@ -91,4 +92,3 @@ export function deepClone<T>(object: T, options: DeepCloneOptions = {}): T {
 
   return cloner({ object, predicates, cloner });
 }
-
