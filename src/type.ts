@@ -19,13 +19,22 @@ export type TypeOptions = {
   showFullClass?: boolean;
   simplify?: boolean;
 };
+
+export type TypeOptionsFull = TypeOptions & { showFullClass: true };
+
+export function type<T extends TypeOptions>(
+  // deno-lint-ignore no-explicit-any
+  obj: any,
+  options?: T,
+): T extends TypeOptionsFull ? (Type | string) : Type;
+
 // deno-lint-ignore no-explicit-any
-export function type(obj: any, options: TypeOptions = {}): Type {
+export function type(obj: any, options: TypeOptions = {}) {
   // get toPrototypeString() of obj (handles all types)
   if (options.showFullClass && typeof obj === "object") {
-    return Object.prototype.toString.call(obj) as Type;
+    return Object.prototype.toString.call(obj);
   }
-  if (obj === null) return (obj + "").toLowerCase() as Type; // implicit toString() conversion
+  if (obj === null) return (obj + "").toLowerCase(); // implicit toString() conversion
 
   const deepTypeFull = Object.prototype.toString.call(obj).toLowerCase();
   const deepType = deepTypeFull.slice(8, -1);
@@ -43,10 +52,10 @@ export function type(obj: any, options: TypeOptions = {}): Type {
       ? deepType
       : (typeof obj === "object" || typeof obj === "function")
       ? "object"
-      : typeof obj) as Type;
+      : typeof obj);
   }
 
   if (deepType === "generatorfunction") return "generator";
 
-  return deepType as Type;
+  return deepType;
 }

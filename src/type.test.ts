@@ -1,10 +1,5 @@
 import { type } from "./type.ts";
-import {
-  assertEquals,
-  assertNotEquals,
-  assertNotStrictEquals,
-  assertStrictEquals,
-} from "https://deno.land/std@0.98.0/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std@0.98.0/testing/asserts.ts";
 
 Deno.test({
   name: "Test type - undefined",
@@ -306,7 +301,9 @@ Deno.test({
   name: "Test type simplify - weakmap",
   fn(): void {
     assertEquals(
-      type(new WeakMap(), { simplify: true }),"object" );
+      type(new WeakMap(), { simplify: true }),
+      "object",
+    );
   },
 });
 
