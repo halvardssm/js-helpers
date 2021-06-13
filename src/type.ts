@@ -16,12 +16,21 @@ export type Type =
   | "null";
 
 export type TypeOptions = {
+  /** Will show types as [object Set] */
   showFullClass?: boolean;
+  /** Will simplify types, essentially the same as
+   * typeof except for that array and null are included
+   * */
   simplify?: boolean;
 };
 
 export type TypeOptionsFull = TypeOptions & { showFullClass: true };
 
+/** Will get the type of any object.
+ *
+ *      type([]) // 'array'
+ *      type(new Set()) // 'set'
+ */
 export function type<T extends TypeOptions>(
   // deno-lint-ignore no-explicit-any
   obj: any,
