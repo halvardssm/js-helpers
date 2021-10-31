@@ -20,7 +20,7 @@ export type TypeOptions = {
   showFullClass?: boolean;
   /** Will simplify types, essentially the same as
    * typeof except for that array and null are included
-   * */
+   */
   simplify?: boolean;
 };
 
