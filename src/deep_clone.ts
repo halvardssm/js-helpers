@@ -57,8 +57,8 @@ export const cloneObject: Predicate = ({
 export const cloneDate: Predicate<Date> = ({ object }) => {
   if (type(object) !== "date") return [false, undefined];
 
-  const newObject: any = new Date();
-  newObject.setTime(object.getTime());
+  const newObject = new Date(object);
+
   return [true, newObject];
 };
 
