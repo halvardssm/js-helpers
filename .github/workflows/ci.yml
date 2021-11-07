@@ -1,7 +1,7 @@
 name: ci
 
 env:
-  DENO_VERSION: 1.10.3
+  DENO_VERSION: 1.15.3
 
 on:
   push:
