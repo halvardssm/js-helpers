@@ -3,7 +3,7 @@ import {
   arrayLoopAroundGenerator,
 } from "./array_loop_around.ts";
 import { range } from "./range.ts";
-import { assertEquals } from "https://deno.land/std@0.98.0/testing/asserts.ts";
+import { assertEquals } from "./deps.ts";
 
 Deno.test({
   name: "Test arrayLoopAround",

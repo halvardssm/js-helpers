@@ -1,5 +1,5 @@
 import { range, rangeGenerator } from "./range.ts";
-import { assertEquals } from "https://deno.land/std@0.98.0/testing/asserts.ts";
+import { assertEquals } from "./deps.ts";
 
 Deno.test({
   name: "Test range - 0:9",

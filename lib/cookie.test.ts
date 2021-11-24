@@ -1,5 +1,5 @@
 import { Cookie, CookiePrefix, CookieSameSite } from "./cookie.ts";
-import { assertEquals } from "https://deno.land/std@0.98.0/testing/asserts.ts";
+import { assertEquals } from "./deps.ts";
 
 Deno.test({
   name: "Test cookie - only name and value",
