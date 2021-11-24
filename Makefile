@@ -2,11 +2,11 @@ test:
 	deno test
 
 lint:
-	deno lint src/mod.ts
+	deno lint lib/mod.ts
 
 fmt:
 	deno fmt --check
 
 bundle:
 	mkdir -p dist
-	deno bundle src/mod.ts dist/bundle.js
+	deno bundle lib/mod.ts dist/bundle.js

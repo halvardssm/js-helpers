@@ -1,6 +1,6 @@
 # js-helpers
 
-[Docs](https://doc.deno.land/https/raw.githubusercontent.com%2Fhalvardssm%2Fjs-helpers%2Fmain%2Fsrc%2Fmod.ts)
+[Docs](https://doc.deno.land/https/raw.githubusercontent.com%2Fhalvardssm%2Fjs-helpers%2Fmain%2Flib%2Fmod.ts)
 
 This is a repo containing helper methods for js written in ts. Testing is done
 via deno. All modules should be compatible with web standards so that they can

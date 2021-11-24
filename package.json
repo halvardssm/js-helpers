@@ -7,6 +7,6 @@
   "main": "dist/bundle.js",
   "files": [
     "dist/*",
-    "src/*"
+    "lib/*"
   ]
 }
