@@ -4,7 +4,7 @@ import { createHttpError, HttpError, isHttpError } from "./http_error.ts";
 Deno.test({
   name: "Test HttpError constructor",
   fn() {
-    const error = new HttpError("test", Status.BadRequest, "asdf");
+    const error = new HttpError("test", Status.BadRequest, { data: "asdf" });
     assertEquals(error.name, "BadRequest");
     assertEquals(error.message, "test");
     assertEquals(error.statusCode, 400);
@@ -34,7 +34,7 @@ Deno.test({
 Deno.test({
   name: "Test createHttpError",
   fn() {
-    const error = createHttpError.OK("test", "asdf");
+    const error = createHttpError.OK("test", { data: "asdf" });
 
     assertEquals(isHttpError(error), true);
     assertEquals(error.name, "OK");
