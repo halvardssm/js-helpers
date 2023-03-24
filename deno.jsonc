@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "lint:check": "deno lint --check",
+    "lint:check": "deno lint",
     "format:check": "deno fmt --check",
     "build:npm": "deno run -A scripts/build_npm.ts",
     "test": "deno test"
