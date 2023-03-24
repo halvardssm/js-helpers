@@ -9,8 +9,8 @@ be used both for Deno and Node (eventually).
 Node support will come eventually if I need it, or someone else starts using the
 repo and requests it.
 
-> 🚨 This is a repo intended for personal use. If you stumbled across it and want
-> to use it, please submit an issue, and I will take care to version it
+> 🚨 This is a repo intended for personal use. If you stumbled across it and
+> want to use it, please submit an issue, and I will take care to version it
 > reasonably. If you can read this message, it means no-one has submitted an
 > issue, meaning I will assume I am the only one using it which may result in
 > sudden breaking changes without any notice.

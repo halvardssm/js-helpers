@@ -1,19 +1,21 @@
 /** See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes */
-export enum CookieSameSite {
-  Strict = "Strict",
-  Lax = "Lax",
-  None = "None",
-}
+export const CookieSameSite = {
+  Strict: "Strict",
+  Lax: "Lax",
+  None: "None",
+} as const;
+
+export type CookieSameSite = typeof CookieSameSite[keyof typeof CookieSameSite];
 
 /** See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#cookie_prefixes */
-export enum CookiePrefix {
+export const CookiePrefix = {
   /**
    * Cookies with names starting with __Secure- (dash is part of the prefix)
    * must be set with the secure flag from a secure page (HTTPS).
    *
    * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes
    */
-  Secure = "__Secure-",
+  Secure: "__Secure-",
   /**
    * Cookies with names starting with __Host- must be set with the secure flag,
    * must be from a secure page (HTTPS), must not have a domain specified
@@ -21,8 +23,10 @@ export enum CookiePrefix {
    *
    * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes
    */
-  Host = "__Host-",
-}
+  Host: "__Host-",
+} as const;
+
+export type CookiePrefix = typeof CookiePrefix[keyof typeof CookiePrefix];
 
 /** See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes */
 export type CookieKey = string;

@@ -1,18 +1,53 @@
-export interface RequesterOptions extends RequestInit {
-  baseUrl?: string;
-  parameters?: Record<string, string | number | null | boolean>;
-}
+/**
+ * Http request method
+ * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+ */
+export const HttpMethod = {
+  /**
+   * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET
+   */
+  Get: "GET",
+  /**
+   * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD
+   */
+  Head: "HEAD",
+  /**
+   * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
+   */
+  Post: "POST",
+  /**
+   * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT
+   */
+  Put: "PUT",
+  /**
+   * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE
+   */
+  Delete: "DELETE",
+  /**
+   * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT
+   */
+  Connect: "CONNECT",
+  /**
+   * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS
+   */
+  Options: "OPTIONS",
+  /**
+   * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/TRACE
+   */
+  Trace: "TRACE",
+  /**
+   * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH
+   */
+  Patch: "PATCH",
+} as const;
 
-export enum FetcherMethod {
-  GET = "GET",
-  POST = "POST",
-  PUT = "PUT",
-  DELETE = "DELETE",
-}
+export type HttpMethod = typeof HttpMethod[keyof typeof HttpMethod];
 
-export enum FetcherHeader {
-  Authorization = "Authorization",
-}
+export const FetcherHeader = {
+  Authorization: "Authorization",
+} as const;
+
+export type FetcherHeader = typeof FetcherHeader[keyof typeof FetcherHeader];
 
 export class FetcherError extends Error {
   response: Response;
@@ -23,83 +58,33 @@ export class FetcherError extends Error {
   }
 }
 
+type RequestInput = URL | string;
+
 export class Fetcher {
-  static _baseUrl: string | undefined;
-  static _token: string | undefined;
+  /**
+   * Base request init
+   * The base request init is used to set default values for all requests.
+   * Will be overridden by the request init passed to the request method based on the behavior from Object.assign.
+   * This means that only top level properties will be merged.
+   */
+  baseRequestInit: RequestInit;
 
-  static get baseUrl() {
-    return this._baseUrl;
+  constructor(baseRequestInit: RequestInit = {}) {
+    this.baseRequestInit = baseRequestInit || {};
   }
 
-  static set baseUrl(url: string | undefined | null) {
-    if (url && url.length > 0) {
-      this._baseUrl = url;
-    } else {
-      this._baseUrl = undefined;
-    }
+  requester(input: RequestInput, init?: RequestInit) {
+    const request = new Request(input, this.baseRequestInit);
+
+    return fetch(request, init);
   }
 
-  static set token(token: string | undefined | null) {
-    if (token && token.length > 0) {
-      this._token = token;
-    } else {
-      this._token = undefined;
-    }
-  }
-
-  static get token() {
-    return this._token;
-  }
-
-  static get hasToken() {
-    return Boolean(this.token);
-  }
-
-  static _parseUrl(input: string, options?: RequesterOptions) {
-    const baseurl = options?.baseUrl ?? this.baseUrl ?? "";
-
-    const url = new URL(input, baseurl);
-
-    if (options?.parameters) {
-      for (const [key, value] of Object.entries(options.parameters)) {
-        if (key && value) {
-          url.searchParams.append(key, value.toString());
-        }
-      }
-    }
-
-    return url.toString();
-  }
-
-  static async requester<ResponseBody = any>(
-    input: string,
-    options?: RequesterOptions,
+  // deno-lint-ignore no-explicit-any
+  async requesterJson<ResponseBody = any>(
+    input: RequestInput,
+    init?: RequestInit,
   ) {
-    const url = this._parseUrl(input, options);
-
-    const parsedOptions: RequestInit = { ...options };
-
-    if (this.token && parsedOptions.headers) {
-      if (parsedOptions.headers instanceof Headers) {
-        if (!parsedOptions.headers.has(FetcherHeader.Authorization)) {
-          parsedOptions.headers.set(FetcherHeader.Authorization, this.token);
-        }
-      } else if (Array.isArray(parsedOptions.headers)) {
-        console.warn(
-          "Automatic insertion of auth token is not supported when header is array. Use Object or Header instance instead.",
-        );
-      } else {
-        if (!parsedOptions.headers[FetcherHeader.Authorization]) {
-          parsedOptions.headers[FetcherHeader.Authorization] = this.token;
-        }
-      }
-    }
-
-    const request = new Request(url, {
-      ...options,
-    });
-
-    const response = await fetch(request);
+    const response = await this.requester(input, init);
 
     if (!response.ok) {
       throw new FetcherError(response);
@@ -108,45 +93,89 @@ export class Fetcher {
     return response.json() as Promise<ResponseBody>;
   }
 
-  static get<ResponseBody = any>(
-    ...params: Parameters<typeof this.requester>
-  ) {
-    return this.requester<ResponseBody>(params[0], {
-      method: FetcherMethod.GET,
-      ...params[1],
+  // deno-lint-ignore no-explicit-any
+  get<ResponseBody = any>(input: RequestInput, init?: RequestInit) {
+    return this.requesterJson<ResponseBody>(input, {
+      method: HttpMethod.Get,
+      ...init,
     });
   }
 
-  static post<ResponseBody = any>(
-    input: Parameters<typeof this.requester>[0],
+  head(input: RequestInput, init?: RequestInit) {
+    return this.requester(input, {
+      method: HttpMethod.Head,
+      ...init,
+    });
+  }
+
+  // deno-lint-ignore no-explicit-any
+  post<ResponseBody = any>(
+    input: RequestInput,
     body: RequestInit["body"],
-    options: Parameters<typeof this.requester>[1],
+    init?: RequestInit,
   ) {
-    return this.requester<ResponseBody>(input, {
-      method: FetcherMethod.POST,
+    return this.requesterJson<ResponseBody>(input, {
+      method: HttpMethod.Post,
       body,
-      ...options,
+      ...init,
     });
   }
 
-  static put<ResponseBody = any>(
-    input: Parameters<typeof this.requester>[0],
+  // deno-lint-ignore no-explicit-any
+  put<ResponseBody = any>(
+    input: RequestInput,
     body: RequestInit["body"],
-    options: Parameters<typeof this.requester>[1],
+    init?: RequestInit,
   ) {
-    return this.requester<ResponseBody>(input, {
-      method: FetcherMethod.PUT,
+    return this.requesterJson<ResponseBody>(input, {
+      method: HttpMethod.Put,
       body,
-      ...options,
+      ...init,
     });
   }
 
-  static delete<ResponseBody = any>(
-    ...params: Parameters<typeof this.requester>
+  // deno-lint-ignore no-explicit-any
+  delete<ResponseBody = any>(
+    input: RequestInput,
+    init?: RequestInit,
   ) {
-    return this.requester<ResponseBody>(params[0], {
-      method: FetcherMethod.DELETE,
-      ...params[1],
+    return this.requesterJson<ResponseBody>(input, {
+      method: HttpMethod.Delete,
+      ...init,
+    });
+  }
+
+  connect(input: RequestInput, init?: RequestInit) {
+    return this.requester(input, {
+      method: HttpMethod.Connect,
+      ...init,
+    });
+  }
+
+  options(input: RequestInput, init?: RequestInit) {
+    return this.requester(input, {
+      method: HttpMethod.Options,
+      ...init,
+    });
+  }
+
+  trace(input: RequestInput, init?: RequestInit) {
+    return this.requester(input, {
+      method: HttpMethod.Trace,
+      ...init,
+    });
+  }
+
+  // deno-lint-ignore no-explicit-any
+  patch<ResponseBody = any>(
+    input: RequestInput,
+    body: RequestInit["body"],
+    init?: RequestInit,
+  ) {
+    return this.requesterJson<ResponseBody>(input, {
+      method: HttpMethod.Patch,
+      body,
+      ...init,
     });
   }
 }
