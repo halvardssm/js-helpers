@@ -38,12 +38,26 @@ jobs:
       - name: Install deno
         uses: denoland/setup-deno@v1
 
+      - name: Get latest tag
+        id: tag
+        run: echo "::set-output name=version::$(git describe --tags --abbrev=0)"
+
+      - name: Has version changed
+        id: version_changed
+        run: |
+          if git diff --quiet "${{steps.tag.outputs.version}}" HEAD -- VERSION; then
+            echo "::set-output name=changed::false"
+          else
+            echo "::set-output name=changed::true"
+          fi
+
       - name: Build package
+        if: steps.version_changed.outputs.changed == 'true'
         run: deno task build:npm
 
-      - name: Check version
-        id: check
-        run: git 
-
       - name: Publish package to NPM
-        run: cd npm && echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && npm publish --new-version ${{steps.check.outputs.version}} --non-interactive
+        if: steps.version_changed.outputs.changed == 'true'
+        run: |
+          cd npm 
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+          npm publish
