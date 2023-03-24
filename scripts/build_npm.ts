@@ -33,7 +33,7 @@ await build({
       url: "https://github.com/halvardssm/js-helpers/issues",
     },
     publishConfig: {
-        registry: "https://npm.pkg.github.com"
+      registry: "https://npm.pkg.github.com",
     },
   },
 });
