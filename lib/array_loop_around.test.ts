@@ -47,7 +47,7 @@ Deno.test({
 
     const gen = arrayLoopAroundGenerator(array, true);
 
-    for (const i of rangeArray) {
+    for (const _i of rangeArray) {
       actual.push(gen.next().value);
     }
 
@@ -65,7 +65,7 @@ Deno.test({
 
     const gen = arrayLoopAroundGenerator(array, false);
 
-    for (const i of rangeArray) {
+    for (const _i of rangeArray) {
       actual.push(gen.next().value);
     }
 

@@ -1,11 +1,12 @@
 import { Status, STATUS_TEXT } from "./deps.ts";
 
 export type HttpErrorOptions = {
+  // deno-lint-ignore no-explicit-any
   data?: any;
 };
 
 export class HttpError extends Error {
-  data?: any;
+  data?: HttpErrorOptions["data"];
   constructor(
     message: string,
     public statusCode: Status,

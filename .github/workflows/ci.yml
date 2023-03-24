@@ -1,8 +1,5 @@
 name: ci
 
-env:
-  DENO_VERSION: 1.15.3
-
 on:
   push:
     branches:
@@ -16,21 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install deno
-        uses: denoland/setup-deno@main
-        with: 
-          deno-version: ${{env.DENO_VERSION}}
+        uses: denoland/setup-deno@v1
 
-      - name: Run fmt
-        run: make fmt
+      - name: Run format check
+        run: deno task format:check
 
-      - name: Run lint
-        run: make lint
+      - name: Run lint check
+        run: deno task lint:check
 
       - name: Run test
-        run: make test
+        run: deno task test
 
   publish_npm:
     needs: test
@@ -38,39 +33,31 @@ jobs:
     if: contains(github.ref, 'main')
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install deno
-        uses: denoland/setup-deno@main
-        with: 
-          deno-version: ${{env.DENO_VERSION}}
+        uses: denoland/setup-deno@v1
 
-      - name: Check version changes
-        id: check
-        uses: EndBug/version-check@v2.0.1
-        with:
-          diff-search: true
-          file-name: ./package.json
+      - name: Get latest tag
+        id: tag
+        run: echo "::set-output name=version::$(git describe --tags --abbrev=0)"
 
-      - name: Version update detected
-        if: steps.check.outputs.changed == 'true'
-        run: 'echo "Version change found! Will run Release CI. New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
+      - name: Has version changed
+        id: version_changed
+        run: |
+          if git diff --quiet "${{steps.tag.outputs.version}}" HEAD -- VERSION; then
+            echo "::set-output name=changed::false"
+          else
+            echo "::set-output name=changed::true"
+          fi
 
-      - name: Create Release
-        if: steps.check.outputs.changed == 'true'
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{steps.check.outputs.version}}
-          release_name: Release ${{steps.check.outputs.version}}
-          draft: false
-          prerelease: false
-
-      - name: Get package name
-        run: PACKAGE_NAME=$(cat package.json | jq .name)
+      - name: Build package
+        if: steps.version_changed.outputs.changed == 'true'
+        run: deno task build:npm
 
       - name: Publish package to NPM
-        if: steps.create_release.outcome == 'Success'
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc && yarn publish --new-version ${{steps.check.outputs.version}} --non-interactive
+        if: steps.version_changed.outputs.changed == 'true'
+        run: |
+          cd npm 
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+          npm publish
