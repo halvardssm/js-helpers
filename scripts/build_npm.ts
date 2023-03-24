@@ -6,7 +6,9 @@ await emptyDir("./npm");
 let version = await Deno.readTextFile("./VERSION");
 version = version.trim();
 
-if(!VERSION_REGEX.test(version)) throw new Error(`Invalid version: ${version}`);
+if (!VERSION_REGEX.test(version)) {
+  throw new Error(`Invalid version: ${version}`);
+}
 
 await build({
   entryPoints: ["./lib/mod.ts"],
