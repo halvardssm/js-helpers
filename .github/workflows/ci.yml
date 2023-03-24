@@ -18,10 +18,10 @@ jobs:
       - name: Install deno
         uses: denoland/setup-deno@v1
 
-      - name: Run fmt
-        run: deno task fmt:check
+      - name: Run format check
+        run: deno task format:check
 
-      - name: Run lint
+      - name: Run lint check
         run: deno task lint:check
 
       - name: Run test
