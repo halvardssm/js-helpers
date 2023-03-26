@@ -19,12 +19,15 @@ await build({
     deno: true,
     undici: true,
   },
+  scriptModule:false,
+  esModule: true,
   package: {
     // package.json properties
     name: "@halvardssm/js-helpers",
     version,
     description: "JavaScript helpers",
     license: "MIT",
+    type: "module",
     repository: {
       type: "git",
       url: "git+https://github.com/halvardssm/js-helpers.git",
