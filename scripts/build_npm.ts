@@ -19,7 +19,7 @@ await build({
     deno: true,
     undici: true,
   },
-  scriptModule:false,
+  scriptModule: false,
   esModule: true,
   package: {
     // package.json properties
