@@ -7,13 +7,9 @@
     "test": "deno test"
   },
   "lint": {
-    "files": {
-      "include": ["lib"]
-    }
+    "include": ["lib"]
   },
   "fmt": {
-    "files": {
-      "exclude": ["npm"]
-    }
+    "exclude": ["npm"]
   }
 }
