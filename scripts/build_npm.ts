@@ -1,17 +1,25 @@
-import { build, emptyDir } from "https://deno.land/x/dnt@0.33.1/mod.ts";
+import { build, emptyDir } from "https://deno.land/x/dnt@0.37.0/mod.ts";
+import { parse } from "https://deno.land/std@0.193.0/semver/mod.ts";
+import config from "../deno.json" assert { type: "json" };
 
-const VERSION_REGEX = /^\d+\.\d+\.\d+(-.+)?$/;
+const version = config.version;
 
 await emptyDir("./npm");
-let version = await Deno.readTextFile("./VERSION");
-version = version.trim();
 
-if (!VERSION_REGEX.test(version)) {
-  throw new Error(`Invalid version: ${version}`);
-}
+parse(version);
 
 await build({
-  entryPoints: ["./lib/mod.ts"],
+  entryPoints: [
+    "./lib/default/mod.ts",
+    {
+      name: "./browser",
+      path: "./lib/browser/mod.ts",
+    },
+    {
+      name: "./system",
+      path: "./lib/system/mod.ts",
+    },
+  ],
   outDir: "./npm",
   test: false,
   shims: {
@@ -38,6 +46,9 @@ await build({
     publishConfig: {
       registry: "https://npm.pkg.github.com",
     },
+  },
+  compilerOptions: {
+    lib: ["DOM", "ESNext"],
   },
 });
 
