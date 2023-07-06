@@ -1,3 +1,6 @@
+import config from "../../deno.json" assert { type: "json" };
+export const VERSION = config.version;
+
 export * from "./array_loop_around.ts";
 export * from "./cookie.ts";
 export * from "./deep_clone.ts";

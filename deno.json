@@ -1,4 +1,5 @@
 {
+  "version": "0.2.0",
   "tasks": {
     "lint:check": "deno lint",
     "format:check": "deno fmt --check",
@@ -6,13 +7,9 @@
     "test": "deno test"
   },
   "lint": {
-    "files": {
-      "include": ["lib"]
-    }
+    "include": ["lib"]
   },
   "fmt": {
-    "files": {
-      "exclude": ["npm"]
-    }
+    "exclude": ["npm"]
   }
 }
