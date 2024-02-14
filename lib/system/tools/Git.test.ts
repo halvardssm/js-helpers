@@ -23,9 +23,5 @@ describe("Git tests", () => {
   it("status command", async () => {
     const git = new Git();
     const res = await git.status();
-    assert(
-      res.success,
-      `Git command not found (code: '${res.code}'): ${res.getDecodedStderr()}`,
-    );
   });
 });

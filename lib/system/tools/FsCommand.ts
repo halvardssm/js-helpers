@@ -1,25 +1,25 @@
 import { PartialBy } from "../../default/mod.ts";
 
-export type AbstractFsCommandOptions = Omit<Deno.CommandOptions, "args"> & {
+export type FsCommandOptions = Omit<Deno.CommandOptions, "args"> & {
   shouldThrowOnFailure?: boolean;
   command: string | URL;
 };
 
 export type InheritedFsCommandOptions = PartialBy<
-  AbstractFsCommandOptions,
+  FsCommandOptions,
   "command"
 >;
 
 export type FsCommandExecuteOptions = PartialBy<
-  AbstractFsCommandOptions,
+  FsCommandOptions,
   "command"
 >;
 
-export abstract class AbstractFsCommand {
+export class FsCommand {
   command: string | URL;
   protected _shouldThrowOnFailure?: boolean;
 
-  constructor(options: AbstractFsCommandOptions) {
+  constructor(options: FsCommandOptions) {
     this.command = options.command;
     this._shouldThrowOnFailure = options.shouldThrowOnFailure;
   }

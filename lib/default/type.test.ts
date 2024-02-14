@@ -1,5 +1,5 @@
 import { type } from "./type.ts";
-import { assertEquals } from "./deps.ts";
+import { assertEquals } from "../deps_dev.ts";
 
 Deno.test({
   name: "Test type - undefined",

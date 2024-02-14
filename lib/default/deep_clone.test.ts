@@ -5,7 +5,7 @@ import {
   assertNotEquals,
   assertNotStrictEquals,
   assertStrictEquals,
-} from "./deps.ts";
+} from "../deps_dev.ts";
 
 Deno.test({
   name: "Test deepClone - null",

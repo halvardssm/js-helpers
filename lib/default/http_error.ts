@@ -1,4 +1,4 @@
-import { Status, STATUS_TEXT } from "./deps.ts";
+import { Status, STATUS_TEXT } from "../deps.ts";
 
 export type HttpErrorOptions = {
   // deno-lint-ignore no-explicit-any

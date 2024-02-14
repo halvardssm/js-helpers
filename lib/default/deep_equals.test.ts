@@ -1,5 +1,5 @@
 import { deepEquals } from "./deep_equals.ts";
-import { assertEquals } from "./deps.ts";
+import { assertEquals } from "../deps_dev.ts";
 
 Deno.test({
   name: "Test deepEquals - simple - true",

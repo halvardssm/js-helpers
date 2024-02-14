@@ -1,4 +1,5 @@
-import { assertEquals, assertThrows, Status } from "./deps.ts";
+import { assertEquals, assertThrows } from "../deps_dev.ts";
+import { Status } from "../deps.ts";
 import { createHttpError, HttpError, isHttpError } from "./http_error.ts";
 
 Deno.test({

@@ -1,10 +1,10 @@
 import {
-  AbstractFsCommand,
+  FsCommand,
   FsCommandExecuteOptions,
   InheritedFsCommandOptions,
-} from "./AbstractFsCommand.ts";
+} from "./FsCommand.ts";
 
-export class Git extends AbstractFsCommand {
+export class Git extends FsCommand {
   constructor(options: InheritedFsCommandOptions = {}) {
     super({
       command: "git",
@@ -17,7 +17,7 @@ export class Git extends AbstractFsCommand {
    *
    * @link https://git-scm.com/docs/git-status
    */
-  async status(args: string[], options?: FsCommandExecuteOptions) {
+  async status(args: string[] = [], options?: FsCommandExecuteOptions) {
     const res = await this.execute(["status", ...args], options);
     return res.getDecodedStdout();
   }

@@ -1,3 +1,3 @@
-export * from "./AbstractFsCommand.ts";
+export * from "./FsCommand.ts";
 
 export * from "./Git.ts";

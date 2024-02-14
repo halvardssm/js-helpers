@@ -1,4 +1,4 @@
-import { ZodType } from "./deps.ts";
+import { join, ZodType } from "../deps.ts";
 
 export type RequesterParameters = Record<
   string,
@@ -167,6 +167,27 @@ export class Fetcher {
   constructor(baseUrl?: string | URL, requestInit?: RequesterOptions) {
     this.baseUrl = baseUrl ? new URL(baseUrl) : undefined;
     this.requestInit = requestInit ?? {};
+  }
+
+  /**
+   * Combine multiple URLs into one.
+   */
+  protected combineUrl(...urls: (string | URL)[]) {
+    let resultUrl = this.baseUrl;
+
+    let pathBase = resultUrl?.pathname;
+    for (const url of urls) {
+      const tmpUrl = new URL(url, resultUrl);
+
+      if (!url.toString().startsWith(tmpUrl.origin) && pathBase) {
+        tmpUrl.pathname = join(pathBase, tmpUrl.pathname);
+      }
+
+      resultUrl = tmpUrl;
+      pathBase = resultUrl.pathname;
+    }
+
+    return resultUrl;
   }
 
   /**
