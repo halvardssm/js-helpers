@@ -1,5 +1,6 @@
 {
   "version": "0.2.0",
+  "lock": false,
   "tasks": {
     "lint:check": "deno lint",
     "format:check": "deno fmt --check",

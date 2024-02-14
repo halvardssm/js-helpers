@@ -1,4 +1,4 @@
-import { build, emptyDir } from "https://deno.land/x/dnt@0.37.0/mod.ts";
+import { build, emptyDir } from "https://deno.land/x/dnt@0.40.0/mod.ts";
 import { parse } from "https://deno.land/std@0.193.0/semver/mod.ts";
 import config from "../deno.json" assert { type: "json" };
 

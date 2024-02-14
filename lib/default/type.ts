@@ -1,3 +1,64 @@
+/**
+ * Make properties K in T optional
+ */
+export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+/**
+ * Make properties K in T required
+ */
+export type RequiredBy<T, K extends keyof T> =
+  & Omit<T, K>
+  & Required<Pick<T, K>>;
+
+/**
+ * Make properties K in T required, and the rest partial
+ */
+export type RequiredPartialBy<T, K extends keyof T> =
+  & RequiredBy<
+    Pick<T, K>,
+    K
+  >
+  & Partial<Omit<T, K>>;
+
+/**
+ * Allows an object to be extended
+ */
+// deno-lint-ignore no-explicit-any
+export type UnConstrain<T> = T & Record<any, any>;
+
+/**
+ * Gets the values of a Record
+ */
+export type ValueOf<T> = T[keyof T];
+
+/**
+ * This is like TS Require<T>, but you can specify the sub-property to target.
+ *
+ * TODO: Check if this can be removed and instead use RequiredBy
+ *
+ * https://stackoverflow.com/questions/69327990/how-can-i-make-one-property-non-optional-in-a-typescript-type
+ */
+export type RequiredSpecific<T, K extends keyof T> = T & { [P in K]-?: T[P] };
+
+/**
+ * Make properties K in T readonly
+ */
+export type ReadonlyBy<T, K extends keyof T> =
+  & Omit<T, K>
+  & Readonly<Pick<T, K>>;
+
+/**
+ * Make all properties in T writable
+ */
+export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+
+/**
+ * Make properties K in T writable
+ */
+export type WriteableBy<T, K extends keyof T> =
+  & Omit<T, K>
+  & Writeable<Pick<T, K>>;
+
 export type Type =
   | "undefined"
   | "array"
