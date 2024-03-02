@@ -102,7 +102,7 @@ export class Cookie {
     this.#value = value;
   }
 
-  toString() {
+  toString(): string {
     return [
       `${this.key}=${this.value}`,
       this.expires && `Expires=${this.expires.toUTCString()}`,
@@ -121,7 +121,7 @@ export class Cookie {
    * Should parse a Set-Cookie string as defined here: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
    * E.g. `__Secure-testKey=testValue; Expires=Sun, 14 Jun 2020 11:01:58 GMT; Max-Age=10; Domain=example.com; Path=/; SameSite=Strict; Secure; HttpOnly`
    */
-  static parseSetCookieString(cookie: string) {
+  static parseSetCookieString(cookie: string): Cookie {
     const parts = cookie.split(";").map(stringTrim);
     if (parts.length < 1) throw new CookieError("Cookie string is not valid");
 
@@ -140,24 +140,19 @@ export class Cookie {
     for (let i = 1; i < parts.length; i++) {
       const [attributeKey, attributeValue] = parts[i].split("=", 2)
         .map(stringTrim);
-      switch (attributeKey) {
-        case "Expires":
+      switch (attributeKey.toLowerCase()) {
         case "expires":
           options.expires = new Date(attributeValue);
           break;
-        case "Max-Age":
         case "max-age":
           options.maxAge = parseInt(attributeValue);
           break;
-        case "Domain":
         case "domain":
           options.domain = attributeValue;
           break;
-        case "Path":
         case "path":
           options.path = attributeValue;
           break;
-        case "SameSite":
         case "samesite": {
           let val: CookieSameSite | undefined = undefined;
 
@@ -177,11 +172,9 @@ export class Cookie {
           options.sameSite = val;
           break;
         }
-        case "Secure":
         case "secure":
           options.secure = true;
           break;
-        case "HttpOnly":
         case "httponly":
           options.httpOnly = true;
           break;
@@ -199,7 +192,7 @@ export class Cookie {
    * Should parse a set of cookies
    * E.g. `testKey=testValue; testKey2=testValue2`
    */
-  static parseCookiesString(cookies: string) {
+  static parseCookiesString(cookies: string): Cookie[] {
     return cookies.split(";").map(Cookie.parseSetCookieString);
   }
 }

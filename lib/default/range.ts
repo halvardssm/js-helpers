@@ -7,7 +7,7 @@
  *      }
  *      // 0,1,2,3
  */
-export function range(start: number, end: number) {
+export function range(start: number, end: number): number[] {
   if (start === end) {
     return [start];
   }
@@ -26,7 +26,7 @@ export function range(start: number, end: number) {
  *      }
  *      // 0,1,2,3
  */
-export function* rangeGenerator(start: number, end: number) {
+export function* rangeGenerator(start: number, end: number): Generator<number> {
   if (start > end) {
     for (let i = start; end <= i; i--) {
       yield i;

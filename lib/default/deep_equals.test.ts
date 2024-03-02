@@ -1,9 +1,9 @@
 import { deepEquals } from "./deep_equals.ts";
-import { assertEquals } from "../deps_dev.ts";
+import { assertEquals } from "@std/assert";
+import { describe, it } from "@std/testing/bdd";
 
-Deno.test({
-  name: "Test deepEquals - simple - true",
-  fn(): void {
+describe("deepEquals tests", () => {
+  it("Test deepEquals - simple - true", () => {
     assertEquals(deepEquals(undefined, undefined), true);
     assertEquals(deepEquals(1, 1), true);
     assertEquals(deepEquals("", ""), true);
@@ -11,22 +11,16 @@ Deno.test({
     assertEquals(deepEquals(new Set(), new Set()), true);
     assertEquals(deepEquals([], []), true);
     assertEquals(deepEquals({}, {}), true);
-  },
-});
+  });
 
-Deno.test({
-  name: "Test deepEquals - simple - false",
-  fn(): void {
+  it("Test deepEquals - simple - false", () => {
     assertEquals(deepEquals(undefined, 1), false);
     assertEquals(deepEquals(1, ""), false);
     assertEquals(deepEquals(null, new Set()), false);
     assertEquals(deepEquals([], {}), false);
-  },
-});
+  });
 
-Deno.test({
-  name: "Test deepEquals - nested - true",
-  fn(): void {
+  it("Test deepEquals - nested - true", () => {
     assertEquals(
       deepEquals(
         [{ a: 4, b: { c: [3, new Set()] } }, 1],
@@ -34,12 +28,9 @@ Deno.test({
       ),
       true,
     );
-  },
-});
+  });
 
-Deno.test({
-  name: "Test deepEquals - nested - false",
-  fn(): void {
+  it("Test deepEquals - nested - false", () => {
     assertEquals(
       deepEquals(
         [{ a: 4, b: { c: [4, new Set()] } }, 1],
@@ -47,5 +38,5 @@ Deno.test({
       ),
       false,
     );
-  },
+  });
 });

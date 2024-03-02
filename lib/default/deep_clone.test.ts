@@ -5,11 +5,11 @@ import {
   assertNotEquals,
   assertNotStrictEquals,
   assertStrictEquals,
-} from "../deps_dev.ts";
+} from "@std/assert";
+import { describe, it } from "@std/testing/bdd";
 
-Deno.test({
-  name: "Test deepClone - null",
-  fn(): void {
+describe("deepClone tests", () => {
+  it("Test deepClone - null", () => {
     const expected = null;
 
     const initial = null;
@@ -17,12 +17,9 @@ Deno.test({
 
     assertEquals(cloned, expected);
     assertStrictEquals(cloned, initial);
-  },
-});
+  });
 
-Deno.test({
-  name: "Test deepClone - string",
-  fn(): void {
+  it("Test deepClone - string", () => {
     const expected = "abc";
 
     const initial = "abc";
@@ -30,12 +27,9 @@ Deno.test({
 
     assertEquals(cloned, expected);
     assertStrictEquals(cloned, initial);
-  },
-});
+  });
 
-Deno.test({
-  name: "Test deepClone - array",
-  fn(): void {
+  it("Test deepClone - array", () => {
     const expected = [1, 2, 3];
 
     const initial = [1, 2, 3];
@@ -49,12 +43,9 @@ Deno.test({
     assertEquals(initial, expected);
     assertEquals(cloned, [1, 4, 3]);
     assertNotEquals(initial, cloned);
-  },
-});
+  });
 
-Deno.test({
-  name: "Test deepClone - object",
-  fn(): void {
+  it("Test deepClone - object", () => {
     const expected = { a: 1, b: 2, c: 3 };
 
     const initial = { a: 1, b: 2, c: 3 };
@@ -68,12 +59,9 @@ Deno.test({
     assertEquals(initial, expected);
     assertEquals(cloned, { a: 1, b: 4, c: 3 });
     assertNotEquals(initial, cloned);
-  },
-});
+  });
 
-Deno.test({
-  name: "Test deepClone - nested",
-  fn(): void {
+  it("Test deepClone - nested", () => {
     const expected = { a: 1, b: [{ d: 4, e: { 5: "f" } }], c: 3 };
 
     const initial = { a: 1, b: [{ d: 4, e: { 5: "f" } }], c: 3 };
@@ -87,12 +75,9 @@ Deno.test({
     assertEquals(initial, expected);
     assertEquals(cloned, { a: 1, b: 4, c: 3 });
     assertNotEquals(initial, cloned);
-  },
-});
+  });
 
-Deno.test({
-  name: "Test deepClone - add predicate",
-  fn(): void {
+  it("Test deepClone - add predicate", () => {
     const expected = new Date();
 
     const initial = new Date();
@@ -100,5 +85,5 @@ Deno.test({
 
     assertEquals(cloned, expected);
     assertNotStrictEquals(cloned, initial);
-  },
+  });
 });

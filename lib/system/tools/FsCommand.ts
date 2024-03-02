@@ -1,6 +1,8 @@
 import { PartialBy } from "../../default/mod.ts";
 
-export type FsCommandOptions = Omit<Deno.CommandOptions, "args"> & {
+export type DenoCommandOptionsWithoutArgs = Omit<Deno.CommandOptions, "args">;
+
+export type FsCommandOptions = DenoCommandOptionsWithoutArgs & {
   shouldThrowOnFailure?: boolean;
   command: string | URL;
 };
@@ -17,11 +19,14 @@ export type FsCommandExecuteOptions = PartialBy<
 
 export class FsCommand {
   command: string | URL;
+  options: DenoCommandOptionsWithoutArgs;
   protected _shouldThrowOnFailure?: boolean;
 
   constructor(options: FsCommandOptions) {
-    this.command = options.command;
-    this._shouldThrowOnFailure = options.shouldThrowOnFailure;
+    const { command, shouldThrowOnFailure, ...rest } = options;
+    this.command = command;
+    this._shouldThrowOnFailure = shouldThrowOnFailure;
+    this.options = rest;
   }
 
   protected shouldThrowOnFailure(options?: FsCommandExecuteOptions): boolean {
@@ -32,16 +37,23 @@ export class FsCommand {
     );
   }
 
-  getCommandInstance(args: string[], options: FsCommandExecuteOptions = {}) {
+  getCommandInstance(
+    args: string[],
+    options: FsCommandExecuteOptions = {},
+  ): Deno.Command {
     const { command, ...rest } = options;
 
     return new Deno.Command(command ?? this.command, {
-      args: args,
+      ...this.options,
       ...rest,
+      args: args,
     });
   }
 
-  async execute(args: string[], options?: FsCommandExecuteOptions) {
+  async execute(
+    args: string[],
+    options?: FsCommandExecuteOptions,
+  ): Promise<FsCommandOutput> {
     const command = this.getCommandInstance(args, options);
 
     const output = new FsCommandOutput(await command.output());
@@ -53,7 +65,10 @@ export class FsCommand {
     return output;
   }
 
-  executeSync(args: string[], options?: FsCommandExecuteOptions) {
+  executeSync(
+    args: string[],
+    options?: FsCommandExecuteOptions,
+  ): FsCommandOutput {
     const command = this.getCommandInstance(args, options);
     const output = new FsCommandOutput(command.outputSync());
 
@@ -64,7 +79,9 @@ export class FsCommand {
     return output;
   }
 
-  protected getVerifyCommandInstance(options: FsCommandExecuteOptions = {}) {
+  protected getVerifyCommandInstance(
+    options: FsCommandExecuteOptions = {},
+  ): Deno.Command {
     const { command, ...rest } = options;
     return this.getCommandInstance([
       "-v",
@@ -75,7 +92,9 @@ export class FsCommand {
     });
   }
 
-  async verifyCommand(options?: FsCommandExecuteOptions) {
+  async verifyCommand(
+    options?: FsCommandExecuteOptions,
+  ): Promise<FsCommandOutput> {
     const commandInstance = this.getVerifyCommandInstance(options);
     const output = new FsCommandOutput(await commandInstance.output());
 
@@ -86,7 +105,7 @@ export class FsCommand {
     return output;
   }
 
-  verifyCommandSync(options?: FsCommandExecuteOptions) {
+  verifyCommandSync(options?: FsCommandExecuteOptions): FsCommandOutput {
     const commandInstance = this.getVerifyCommandInstance(options);
     const output = new FsCommandOutput(commandInstance.outputSync());
 
@@ -100,7 +119,7 @@ export class FsCommand {
 
 export class FsCommandOutput implements Deno.CommandOutput {
   readonly output: Deno.CommandOutput;
-  protected textDecoder = new TextDecoder();
+  protected textDecoder: TextDecoder = new TextDecoder();
 
   constructor(output: Deno.CommandOutput) {
     this.output = output;
@@ -122,18 +141,18 @@ export class FsCommandOutput implements Deno.CommandOutput {
     return this.output.signal;
   }
 
-  getDecodedStdout() {
+  getDecodedStdout(): string {
     return this.textDecoder.decode(this.output.stdout).trim();
   }
 
-  getDecodedStderr() {
+  getDecodedStderr(): string {
     return this.textDecoder.decode(this.output.stderr).trim();
   }
 }
 
 export class FsCommandError extends Error implements Deno.CommandOutput {
   readonly output: Deno.CommandOutput;
-  protected textDecoder = new TextDecoder();
+  protected textDecoder: TextDecoder = new TextDecoder();
 
   constructor(output: Deno.CommandOutput) {
     super(`Command failed with code ${output.code}`);
@@ -156,15 +175,15 @@ export class FsCommandError extends Error implements Deno.CommandOutput {
     return this.output.signal;
   }
 
-  getDecodedStdout() {
+  getDecodedStdout(): string {
     return this.textDecoder.decode(this.output.stdout).trim();
   }
 
-  getDecodedStderr() {
+  getDecodedStderr(): string {
     return this.textDecoder.decode(this.output.stderr).trim();
   }
 
-  static assertSuccess(output: FsCommandOutput) {
+  static assertSuccess(output: FsCommandOutput): void {
     if (!output.success) {
       throw new FsCommandError(output);
     }

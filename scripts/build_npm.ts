@@ -31,7 +31,7 @@ await build({
   esModule: true,
   package: {
     // package.json properties
-    name: "@halvardssm/js-helpers",
+    name: "@halvardm/js-helpers",
     version,
     description: "JavaScript helpers",
     license: "MIT",

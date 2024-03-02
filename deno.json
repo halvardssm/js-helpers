@@ -1,5 +1,11 @@
 {
+  "name": "@halvardm/js-helpers",
   "version": "0.2.0",
+  "exports": {
+    ".": "./lib/default/mod.ts",
+    "./browser": "./lib/browser/mod.ts",
+    "./system": "./lib/system/mod.ts"
+  },
   "lock": false,
   "tasks": {
     "lint:check": "deno lint",
@@ -12,5 +18,13 @@
   },
   "fmt": {
     "exclude": ["npm"]
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^0.218.2",
+    "@std/fs": "jsr:@std/fs@^0.218.2",
+    "@std/http": "jsr:@std/http@^0.218.2",
+    "@std/path": "jsr:@std/path@^0.218.2",
+    "@std/testing": "jsr:@std/testing@^0.218.2",
+    "zod": "npm:zod@^3.22.4"
   }
 }

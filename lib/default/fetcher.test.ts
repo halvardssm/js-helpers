@@ -1,11 +1,6 @@
-import { Fetcher, FetcherError, ValidatorFetcher } from "./fetcher.ts";
-import {
-  assertEquals,
-  assertInstanceOf,
-  assertThrows,
-  describe,
-  it,
-} from "../deps_dev.ts";
+import { Fetcher, FetcherError } from "./fetcher.ts";
+import { describe, it } from "@std/testing/bdd";
+import { assertEquals, assertInstanceOf, assertThrows } from "@std/assert";
 
 describe("fetcher tests", () => {
   describe("Test FetcherError", () => {

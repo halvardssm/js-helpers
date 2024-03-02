@@ -1,4 +1,4 @@
-import config from "../../deno.json" assert { type: "json" };
+import config from "../../deno.json" with { type: "json" };
 export const VERSION = config.version;
 
 export * from "./array_loop_around.ts";

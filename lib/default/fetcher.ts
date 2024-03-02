@@ -1,4 +1,5 @@
-import { join, ZodType } from "../deps.ts";
+import { join } from "@std/path";
+import { ZodType } from "zod";
 
 export type RequesterParameters = Record<
   string,
@@ -119,7 +120,9 @@ export class FetcherError<BodyJson = unknown> extends Error {
   /**
    * Parse response to FetcherError
    */
-  static async parseFromResponse<BodyJson = unknown>(response: Response) {
+  static async parseFromResponse<BodyJson = unknown>(
+    response: Response,
+  ): Promise<FetcherError<BodyJson>> {
     const bodyString = await response.text();
     let bodyJson: BodyJson | undefined = undefined;
 
@@ -172,7 +175,7 @@ export class Fetcher {
   /**
    * Combine multiple URLs into one.
    */
-  protected combineUrl(...urls: (string | URL)[]) {
+  protected combineUrl(...urls: (string | URL)[]): URL {
     let resultUrl = this.baseUrl;
 
     let pathBase = resultUrl?.pathname;
@@ -187,7 +190,7 @@ export class Fetcher {
       pathBase = resultUrl.pathname;
     }
 
-    return resultUrl;
+    return resultUrl as URL;
   }
 
   /**
@@ -212,7 +215,7 @@ export class Fetcher {
   protected addParametersToUrl(
     url: URL,
     parameters?: RequesterOptions["parameters"],
-  ) {
+  ): void {
     if (parameters) {
       for (const [key, value] of Object.entries(parameters)) {
         if (key && value) {
@@ -232,7 +235,7 @@ export class Fetcher {
   >(
     input: string,
     options?: R,
-  ) {
+  ): Promise<Response> {
     const url = new URL(input, options?.baseUrl || this.baseUrl);
 
     this.addParametersToUrl(url, options?.parameters);
@@ -264,7 +267,7 @@ export class Fetcher {
   >(
     input: string,
     options?: R,
-  ) {
+  ): Promise<ResponseBody> {
     const response = await this.requester<R>(input, options);
     return response.json() as Promise<ResponseBody>;
   }
@@ -282,7 +285,7 @@ export class Fetcher {
   get<ResponseBody = any, R extends RequesterOptions = RequesterOptions>(
     input: string,
     options?: R,
-  ) {
+  ): Promise<ResponseBody> {
     return this.requesterJson<ResponseBody, R>(input, {
       method: HttpMethod.Get,
       ...(options ?? {} as R),
@@ -302,7 +305,7 @@ export class Fetcher {
   head<R extends RequesterOptions = RequesterOptions>(
     input: string,
     options?: R,
-  ) {
+  ): Promise<Response> {
     return this.requester<R>(input, {
       method: HttpMethod.Head,
       ...(options ?? {} as R),
@@ -326,7 +329,7 @@ export class Fetcher {
     input: string,
     body: R["body"],
     options?: R,
-  ) {
+  ): Promise<ResponseBody> {
     return this.requesterJson<ResponseBody, R>(input, {
       method: HttpMethod.Post,
       body,
@@ -348,7 +351,7 @@ export class Fetcher {
     input: string,
     body: R["body"],
     options?: R,
-  ) {
+  ): Promise<ResponseBody> {
     return this.requesterJson<ResponseBody, R>(input, {
       method: HttpMethod.Put,
       body,
@@ -372,7 +375,7 @@ export class Fetcher {
   >(
     input: string,
     options?: R,
-  ) {
+  ): Promise<ResponseBody> {
     return this.requesterJson<ResponseBody, R>(input, {
       method: HttpMethod.Delete,
       ...(options ?? {} as R),
@@ -390,7 +393,7 @@ export class Fetcher {
   connect<R extends RequesterOptions = RequesterOptions>(
     input: string,
     options?: R,
-  ) {
+  ): Promise<Response> {
     return this.requester<R>(input, {
       method: HttpMethod.Connect,
       ...(options ?? {} as R),
@@ -408,7 +411,7 @@ export class Fetcher {
   options<R extends RequesterOptions = RequesterOptions>(
     input: string,
     options?: R,
-  ) {
+  ): Promise<Response> {
     return this.requester<R>(input, {
       method: HttpMethod.Options,
       ...(options ?? {} as R),
@@ -426,7 +429,7 @@ export class Fetcher {
   trace<R extends RequesterOptions = RequesterOptions>(
     input: string,
     options?: R,
-  ) {
+  ): Promise<Response> {
     return this.requester<R>(input, {
       method: HttpMethod.Trace,
       ...(options ?? {} as R),
@@ -449,7 +452,7 @@ export class Fetcher {
     input: string,
     body: R["body"],
     options?: R,
-  ) {
+  ): Promise<ResponseBody> {
     return this.requesterJson<ResponseBody, R>(input, {
       method: HttpMethod.Patch,
       body,
@@ -501,7 +504,7 @@ export class ValidatorFetcher extends Fetcher {
   >(
     input: string,
     options?: R,
-  ) {
+  ): Promise<Response> {
     const requestParametersValidator = options?.requestParametersValidator ||
       this.requestParametersValidator;
     if (options?.parameters) {
@@ -530,7 +533,7 @@ export class ValidatorFetcher extends Fetcher {
   >(
     input: string,
     options?: R,
-  ) {
+  ): Promise<ResponseBody> {
     const response = await this.requester<R>(input, options);
     const responseBody = response.json() as Promise<ResponseBody>;
 

@@ -3,11 +3,11 @@ import {
   arrayLoopAroundGenerator,
 } from "./array_loop_around.ts";
 import { range } from "./range.ts";
-import { assertEquals } from "../deps_dev.ts";
+import { assertEquals } from "@std/assert";
+import { describe, it } from "@std/testing/bdd";
 
-Deno.test({
-  name: "Test arrayLoopAround",
-  fn(): void {
+describe("array_loop_around tests", () => {
+  it("Test arrayLoopAround", () => {
     const rangeArray = range(0, 9);
     const expected = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1];
     const array = [1, 2, 3];
@@ -18,12 +18,9 @@ Deno.test({
     }
 
     assertEquals(actual, expected);
-  },
-});
+  });
 
-Deno.test({
-  name: "Test arrayLoopAround - negative index",
-  fn(): void {
+  it("Test arrayLoopAround - negative index", () => {
     const rangeArray = range(2, -2);
     const expected = [3, 2, 1, 3, 2];
     const array = [1, 2, 3];
@@ -34,12 +31,9 @@ Deno.test({
     }
 
     assertEquals(actual, expected);
-  },
-});
+  });
 
-Deno.test({
-  name: "Test arrayLoopAroundGenerator ascending",
-  fn(): void {
+  it("Test arrayLoopAroundGenerator ascending", () => {
     const rangeArray = range(0, 9);
     const expected = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1];
     const array = [1, 2, 3];
@@ -52,12 +46,9 @@ Deno.test({
     }
 
     assertEquals(actual, expected);
-  },
-});
+  });
 
-Deno.test({
-  name: "Test arrayLoopAroundGenerator - descending",
-  fn(): void {
+  it("Test arrayLoopAroundGenerator - descending", () => {
     const rangeArray = range(0, 9);
     const expected = [3, 2, 1, 3, 2, 1, 3, 2, 1, 3];
     const array = [1, 2, 3];
@@ -70,5 +61,5 @@ Deno.test({
     }
 
     assertEquals(actual, expected);
-  },
+  });
 });

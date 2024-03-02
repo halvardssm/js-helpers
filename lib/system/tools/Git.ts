@@ -13,11 +13,37 @@ export class Git extends FsCommand {
   }
 
   /**
+   * Git init
+   *
+   * @link https://git-scm.com/docs/git-init
+   */
+  async init(
+    args: string[] = [],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
+    const res = await this.execute(["init", ...args], options);
+    return res.getDecodedStdout();
+  }
+
+  /**
+   * Git init (sync)
+   *
+   * @link https://git-scm.com/docs/git-init
+   */
+  initSync(args: string[] = [], options?: FsCommandExecuteOptions): string {
+    const res = this.executeSync(["init", ...args], options);
+    return res.getDecodedStdout();
+  }
+
+  /**
    * Git status
    *
    * @link https://git-scm.com/docs/git-status
    */
-  async status(args: string[] = [], options?: FsCommandExecuteOptions) {
+  async status(
+    args: string[] = [],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
     const res = await this.execute(["status", ...args], options);
     return res.getDecodedStdout();
   }
@@ -27,7 +53,7 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-status
    */
-  statusSync(args: string[], options?: FsCommandExecuteOptions) {
+  statusSync(args: string[], options?: FsCommandExecuteOptions): string {
     const res = this.executeSync(["status", ...args], options);
     return res.getDecodedStdout();
   }
@@ -37,7 +63,10 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-add
    */
-  async add(args: string[], options?: FsCommandExecuteOptions) {
+  async add(
+    args: string[],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
     const res = await this.execute(["add", ...args], options);
     return res.getDecodedStdout();
   }
@@ -47,7 +76,7 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-add
    */
-  addSync(args: string[], options?: FsCommandExecuteOptions) {
+  addSync(args: string[], options?: FsCommandExecuteOptions): string {
     const res = this.executeSync(["add", ...args], options);
     return res.getDecodedStdout();
   }
@@ -57,7 +86,10 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-commit
    */
-  async commit(args: string[], options?: FsCommandExecuteOptions) {
+  async commit(
+    args: string[],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
     const res = await this.execute(["commit", ...args], options);
     return res.getDecodedStdout();
   }
@@ -67,7 +99,7 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-commit
    */
-  commitSync(args: string[], options?: FsCommandExecuteOptions) {
+  commitSync(args: string[], options?: FsCommandExecuteOptions): string {
     const res = this.executeSync(["commit", ...args], options);
     return res.getDecodedStdout();
   }
@@ -77,7 +109,10 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-log
    */
-  async log(args: string[], options?: FsCommandExecuteOptions) {
+  async log(
+    args: string[],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
     const res = await this.execute(["log", ...args], options);
     return res.getDecodedStdout();
   }
@@ -87,7 +122,7 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-log
    */
-  logSync(args: string[], options?: FsCommandExecuteOptions) {
+  logSync(args: string[], options?: FsCommandExecuteOptions): string {
     const res = this.executeSync(["log", ...args], options);
     return res.getDecodedStdout();
   }
@@ -97,7 +132,10 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-push
    */
-  async push(args: string[], options?: FsCommandExecuteOptions) {
+  async push(
+    args: string[],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
     const res = await this.execute(["push", ...args], options);
     return res.getDecodedStdout();
   }
@@ -107,7 +145,7 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-push
    */
-  pushSync(args: string[], options?: FsCommandExecuteOptions) {
+  pushSync(args: string[], options?: FsCommandExecuteOptions): string {
     const res = this.executeSync(["push", ...args], options);
     return res.getDecodedStdout();
   }
@@ -117,7 +155,10 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-fetch
    */
-  async fetch(args: string[], options?: FsCommandExecuteOptions) {
+  async fetch(
+    args: string[],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
     const res = await this.execute(["fetch", ...args], options);
     return res.getDecodedStdout();
   }
@@ -127,7 +168,7 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-fetch
    */
-  fetchSync(args: string[], options?: FsCommandExecuteOptions) {
+  fetchSync(args: string[], options?: FsCommandExecuteOptions): string {
     const res = this.executeSync(["fetch", ...args], options);
     return res.getDecodedStdout();
   }
@@ -137,7 +178,10 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-pull
    */
-  async pull(args: string[], options?: FsCommandExecuteOptions) {
+  async pull(
+    args: string[],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
     const res = await this.execute(["pull", ...args], options);
     return res.getDecodedStdout();
   }
@@ -147,7 +191,7 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-pull
    */
-  pullSync(args: string[], options?: FsCommandExecuteOptions) {
+  pullSync(args: string[], options?: FsCommandExecuteOptions): string {
     const res = this.executeSync(["pull", ...args], options);
     return res.getDecodedStdout();
   }
@@ -157,7 +201,10 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-clone
    */
-  async clone(args: string[], options?: FsCommandExecuteOptions) {
+  async clone(
+    args: string[],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
     const res = await this.execute(["clone", ...args], options);
     return res.getDecodedStdout();
   }
@@ -167,7 +214,7 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-clone
    */
-  cloneSync(args: string[], options?: FsCommandExecuteOptions) {
+  cloneSync(args: string[], options?: FsCommandExecuteOptions): string {
     const res = this.executeSync(["clone", ...args], options);
     return res.getDecodedStdout();
   }
@@ -177,7 +224,10 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-reset
    */
-  async reset(args: string[], options?: FsCommandExecuteOptions) {
+  async reset(
+    args: string[],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
     const res = await this.execute(["reset", ...args], options);
     return res.getDecodedStdout();
   }
@@ -187,8 +237,40 @@ export class Git extends FsCommand {
    *
    * @link https://git-scm.com/docs/git-reset
    */
-  resetSync(args: string[], options?: FsCommandExecuteOptions) {
+  resetSync(args: string[], options?: FsCommandExecuteOptions): string {
     const res = this.executeSync(["reset", ...args], options);
     return res.getDecodedStdout();
+  }
+
+  /**
+   * Custom commands
+   */
+
+  /**
+   * Git status short
+   *
+   * Same as status but with --short flag
+   *
+   * @link https://git-scm.com/docs/git-status
+   */
+  statusShort(
+    args: string[] = [],
+    options?: FsCommandExecuteOptions,
+  ): Promise<string> {
+    return this.status(["--short", ...args], options);
+  }
+
+  /**
+   * Git status short (sync)
+   *
+   * Same as statusSync but with --short flag
+   *
+   * @link https://git-scm.com/docs/git-status
+   */
+  statusSyncShort(
+    args: string[] = [],
+    options?: FsCommandExecuteOptions,
+  ): string {
+    return this.statusSync(["--short", ...args], options);
   }
 }

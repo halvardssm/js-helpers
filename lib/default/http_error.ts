@@ -1,4 +1,4 @@
-import { Status, STATUS_TEXT } from "../deps.ts";
+import { STATUS_CODE, STATUS_TEXT, StatusCode } from "@std/http";
 
 export type HttpErrorOptions = {
   // deno-lint-ignore no-explicit-any
@@ -9,11 +9,11 @@ export class HttpError extends Error {
   data?: HttpErrorOptions["data"];
   constructor(
     message: string,
-    public statusCode: Status,
+    public statusCode: StatusCode,
     options: HttpErrorOptions = {},
   ) {
     super(message);
-    this.name = STATUS_TEXT.get(statusCode)?.replaceAll(" ", "") ??
+    this.name = STATUS_TEXT[statusCode]?.replaceAll(" ", "") ??
       this.constructor.name;
     if (options.data) this.data = options.data;
   }
@@ -28,12 +28,15 @@ export type CreateHttpErrorFn = (
   options?: HttpErrorOptions,
 ) => HttpError;
 
-export const createHttpError = Object.entries(Status).reduce(
+export const createHttpError: Record<
+  keyof typeof STATUS_CODE,
+  CreateHttpErrorFn
+> = Object.entries(STATUS_CODE).reduce(
   (prev, [key, value]) => {
     const fn: CreateHttpErrorFn = (message, options) =>
-      new HttpError(message, value as number, options);
+      new HttpError(message, value, options);
 
     return { ...prev, [key]: fn };
   },
   {},
-) as Record<keyof typeof Status, CreateHttpErrorFn>;
+) as Record<keyof typeof STATUS_CODE, CreateHttpErrorFn>;
