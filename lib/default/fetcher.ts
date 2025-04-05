@@ -105,7 +105,7 @@ export class FetcherError<BodyJson = unknown> extends Error {
   url: string;
   bodyString: string;
   bodyJson?: BodyJson;
-  name = this.constructor.name;
+  override name = this.constructor.name;
 
   constructor(options: FetcherErrorOptions<BodyJson>) {
     super(options.statusText);
@@ -498,7 +498,7 @@ export class ValidatorFetcher extends Fetcher {
   /**
    * @inheritdoc
    */
-  async requester<
+  override async requester<
     R extends ValidatorFetcherRequesterOptions =
       ValidatorFetcherRequesterOptions,
   >(
@@ -525,7 +525,7 @@ export class ValidatorFetcher extends Fetcher {
   /**
    * @inheritdoc
    */
-  async requesterJson<
+  override async requesterJson<
     // deno-lint-ignore no-explicit-any
     ResponseBody = any,
     R extends ValidatorFetcherRequesterOptions =
